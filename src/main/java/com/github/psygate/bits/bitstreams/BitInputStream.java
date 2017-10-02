@@ -246,7 +246,6 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
         return Float.intBitsToFloat(readInt());
     }
 
-    @Deprecated
     @Override
     public double readDouble() throws IOException {
         return Double.longBitsToDouble(readLong());
@@ -254,7 +253,7 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
 
     @Override
     public String readLine() throws IOException {
-        return new DataInputStream(this).readLine();
+        return new BufferedReader(new InputStreamReader(this)).readLine();
     }
 
     @Override
