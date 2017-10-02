@@ -30,7 +30,7 @@ compileJava {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'BitVectors',
+        attributes 'Implementation-Title': 'BitUtils',
                 'Implementation-Version': version
     }
 }

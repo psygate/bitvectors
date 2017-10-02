@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.psygate.bits.bitvectors;
+package com.github.psygate.bitutils.bitvectors;
 
 /**
  * Created by psygate on 01.09.2017.

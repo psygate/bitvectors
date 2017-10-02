@@ -3,6 +3,6 @@
  */
 module com.github.psygate.bits {
     requires java.base;
-    exports com.github.psygate.bits.bitstreams;
-    exports com.github.psygate.bits.bitvectors;
+    exports com.github.psygate.bitutils.bitstreams;
+    exports com.github.psygate.bitutils.bitvectors;
 }

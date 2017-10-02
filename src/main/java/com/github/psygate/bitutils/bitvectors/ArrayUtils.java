@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.psygate.bits.bitvectors;
+package com.github.psygate.bitutils.bitvectors;
 
 import java.util.Arrays;
 

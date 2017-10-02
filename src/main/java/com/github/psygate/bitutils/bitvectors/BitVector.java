@@ -23,11 +23,11 @@
  * SOFTWARE.
  */
 
-package com.github.psygate.bits.bitvectors;
+package com.github.psygate.bitutils.bitvectors;
 
 import java.util.Arrays;
 
-import static com.github.psygate.bits.bitvectors.ArrayUtils.packToLong;
+import static com.github.psygate.bitutils.bitvectors.ArrayUtils.packToLong;
 
 /**
  * Created by psygate on 04.09.2017.

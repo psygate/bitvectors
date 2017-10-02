@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.psygate.bits.bitstreams;
+package com.github.psygate.bitutils.bitstreams;
 
 import java.io.DataOutput;
 import java.io.IOException;

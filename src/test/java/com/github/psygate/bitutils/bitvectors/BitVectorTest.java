@@ -1,11 +1,11 @@
-package com.github.psygate.bits.bitvectors;
+package com.github.psygate.bitutils.bitvectors;
 
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
-import static com.github.psygate.bits.bitvectors.ArrayUtils.*;
+import static com.github.psygate.bitutils.bitvectors.ArrayUtils.*;
 import static org.junit.Assert.*;
 
 /**

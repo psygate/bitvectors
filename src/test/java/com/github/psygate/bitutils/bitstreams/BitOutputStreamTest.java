@@ -23,9 +23,9 @@
  * SOFTWARE.
  */
 
-package com.github.psygate.bits.bitvectors;
+package com.github.psygate.bitutils.bitstreams;
 
-import com.github.psygate.bits.bitstreams.BitOutputStream;
+import com.github.psygate.bitutils.bitstreams.BitOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
