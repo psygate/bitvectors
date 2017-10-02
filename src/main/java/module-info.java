@@ -3,5 +3,6 @@
  */
 module re.elite.server {
     requires java.base;
+    exports com.github.psygate.bits.bitstreams;
     exports com.github.psygate.bits.bitvectors;
 }
