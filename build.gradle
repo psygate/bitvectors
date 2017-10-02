@@ -1,4 +1,4 @@
-group 'com.github.psygate.datastructures'
+group 'com.github.psygate'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

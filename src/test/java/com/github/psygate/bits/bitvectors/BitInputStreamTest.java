@@ -1,5 +1,6 @@
 package com.github.psygate.bits.bitvectors;
 
+import com.github.psygate.bits.bitstreams.BitInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
