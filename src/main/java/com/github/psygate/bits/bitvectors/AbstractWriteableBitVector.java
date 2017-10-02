@@ -36,6 +36,7 @@ package com.github.psygate.bits.bitvectors;
  * Write methods append to the vector, extending it.
  * Set methods set already existing bits, extending when necessary.
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractWriteableBitVector<T extends AbstractWriteableBitVector<T>> extends AbstractReadableBitVector<T> {
     /**
      * @param bit Bit to write.
