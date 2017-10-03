@@ -116,7 +116,7 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
             }
 
             position += amount;
-            return value;
+            return value & fitIntegerMask(amount);
         }
     }
 
@@ -137,7 +137,7 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
             long lowerValue = ((long) readBits(Integer.SIZE)) & 0xFFFFFFFFL;
             long upperValue = (((long) readBits(Integer.SIZE)) & 0xFFFFFFFFL) << Integer.SIZE;
 
-            return lowerValue | upperValue;
+            return (lowerValue | upperValue) & fitMask(amount);
         }
     }
 
@@ -169,6 +169,16 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
      */
     private static long fitMask(int amount) {
         return 0xFFFFFFFFFFFFFFFFL >>> (Long.SIZE - amount);
+    }
+
+    /**
+     * This method is unchecked so amounts bigger the Long.SIZE or amounts smaller than 0 may work.
+     *
+     * @param amount Amount of bits to mask (from the lsb to the msb).
+     * @return Masked value.
+     */
+    private static int fitIntegerMask(int amount) {
+        return 0xFFFFFFFF >>> (Integer.SIZE - amount);
     }
 
     @Override
@@ -223,7 +233,7 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
 
     @Override
     public int readUnsignedShort() throws IOException {
-        return (byte) readBits(Short.SIZE);
+        return readBits(Short.SIZE);
     }
 
     @Override

@@ -26,6 +26,7 @@
 package com.github.psygate.bitutils.bitstreams;
 
 import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
@@ -135,61 +136,86 @@ public class BitOutputStream extends OutputStream implements AutoCloseable, Data
 
     @Override
     public void writeBoolean(boolean v) throws IOException {
-
+        writeBits((v) ? 1 : 0, Byte.SIZE);
     }
 
     @Override
     public void writeByte(int v) throws IOException {
-
+        writeBits(v, Byte.SIZE);
     }
 
     @Override
     public void writeShort(int v) throws IOException {
-
+        writeBits(v, Short.SIZE);
     }
 
     @Override
     public void writeChar(int v) throws IOException {
-
+        writeBits(v >> (Byte.SIZE), Byte.SIZE); //Write high order bits
+        writeBits(v, Byte.SIZE);    //Write low order bits.
     }
 
     @Override
     public void writeInt(int v) throws IOException {
-
+        writeBits(v, Integer.SIZE);
     }
 
     @Override
     public void writeLong(long v) throws IOException {
-
+        writeBitsLong(v, Long.SIZE);
     }
 
     @Override
     public void writeFloat(float v) throws IOException {
-
+        writeInt(Float.floatToIntBits(v));
     }
 
     @Override
     public void writeDouble(double v) throws IOException {
-
+        writeLong(Double.doubleToLongBits(v));
     }
 
     @Override
     public void writeBytes(String s) throws IOException {
-
+        try {
+            s.chars().map(v -> v & 0xFF).forEach(v -> {
+                try {
+                    writeByte(v);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            }
+        }
     }
 
     @Override
     public void writeChars(String s) throws IOException {
-
+        try {
+            s.chars().forEach(v -> {
+                try {
+                    writeChar(v);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            }
+        }
     }
 
     @Override
     public void writeUTF(String s) throws IOException {
-
+        new DataOutputStream(this).writeUTF(s);
     }
 
     @Override
     public void write(int b) throws IOException {
-
+        writeBits(b, Byte.SIZE);
     }
 }
