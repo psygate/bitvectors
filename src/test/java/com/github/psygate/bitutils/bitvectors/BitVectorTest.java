@@ -19,7 +19,7 @@ public class BitVectorTest {
     @Test
     public void toBooleanArray() throws Exception {
         assertArrayEquals(new boolean[0], new BitVector().toBooleanArray());
-        assertArrayEquals(new boolean[0], BitVector.EMPTY().toBooleanArray());
+        assertArrayEquals(new boolean[0], BitVector.emptyVector().toBooleanArray());
         assertArrayEquals(new boolean[0], new BitVector(0).toBooleanArray());
         assertArrayEquals(new boolean[0], BitVector.of(new byte[0]).toBooleanArray());
         assertArrayEquals(new boolean[0], BitVector.of(new long[0]).toBooleanArray());
@@ -204,22 +204,22 @@ public class BitVectorTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void subVectorThrows() throws Exception {
-        BitVector.EMPTY().subVector(-1, 0);
+        BitVector.emptyVector().subVector(-1, 0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void subVectorThrows1() throws Exception {
-        BitVector.EMPTY().subVector(0, -1);
+        BitVector.emptyVector().subVector(0, -1);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void subVectorThrows2() throws Exception {
-        BitVector.EMPTY().subVector(0, 1);
+        BitVector.emptyVector().subVector(0, 1);
     }
 
     @Test
     public void subVector() throws Exception {
-        assertEquals(BitVector.EMPTY(), BitVector.EMPTY().subVector(0, 0));
+        assertEquals(BitVector.emptyVector(), BitVector.emptyVector().subVector(0, 0));
 
         for (int position = 0; position < 8; position++) {
             for (int length = 0; length < Byte.SIZE - position; length++) {
@@ -330,7 +330,7 @@ public class BitVectorTest {
         for (int offset = 0; offset < Long.SIZE + 2; offset++) {
             boolean[] padding = new boolean[offset];
             for (int i = 0; i < 256; i++) {
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeByte((byte) i);
                 assertArrayEquals(concat(padding, byteAsBooleanArray(i)), vec.toBooleanArray());
@@ -344,7 +344,7 @@ public class BitVectorTest {
             boolean[] padding = new boolean[offset];
             for (int b = 0; b < 256; b++) {
                 int value = 0xFFFFFFF0 | b;
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeByte(value);
                 assertArrayEquals(concat(padding, byteAsBooleanArray(value)), vec.toBooleanArray());
@@ -358,7 +358,7 @@ public class BitVectorTest {
             boolean[] padding = new boolean[offset];
             for (int b = 0; b < 256; b++) {
                 short value = (short) (b | 0xFFFFAB00);
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeShort(value);
                 assertArrayEquals(concat(padding, shortAsBooleanArray(value)), vec.toBooleanArray());
@@ -372,7 +372,7 @@ public class BitVectorTest {
             boolean[] padding = new boolean[offset];
             for (int b = 0; b < 256; b++) {
                 int value = (b | 0xFFFFAB00);
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeShort(value);
                 assertArrayEquals(concat(padding, shortAsBooleanArray(value)), vec.toBooleanArray());
@@ -386,7 +386,7 @@ public class BitVectorTest {
             boolean[] padding = new boolean[offset];
             for (int b = 0; b < 256; b++) {
                 int value = (b | 0xABCDEF00);
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeInt(value);
                 assertArrayEquals(concat(padding, intAsBooleanArray(value)), vec.toBooleanArray());
@@ -400,7 +400,7 @@ public class BitVectorTest {
             boolean[] padding = new boolean[offset];
             for (int b = 0; b < 256; b++) {
                 long value = (b | 0xABCDEF1234567890L);
-                BitVector vec = BitVector.EMPTY();
+                BitVector vec = BitVector.emptyVector();
                 vec = vec.write(padding);
                 vec = vec.writeLong(value);
                 assertArrayEquals(concat(padding, longAsBooleanArray(value)), vec.toBooleanArray());
@@ -624,7 +624,7 @@ public class BitVectorTest {
 
     @Test
     public void write() throws Exception {
-        assertEquals(BitVector.EMPTY(), BitVector.EMPTY().write(BitVector.EMPTY()));
+        assertEquals(BitVector.emptyVector(), BitVector.emptyVector().write(BitVector.emptyVector()));
 
         for (int i = 0; i < Long.SIZE * 8; i++) {
             boolean[] source = new boolean[Long.SIZE * 8];
@@ -659,7 +659,7 @@ public class BitVectorTest {
 
     @Test
     public void write1() throws Exception {
-        assertEquals(BitVector.EMPTY(), BitVector.EMPTY().write(BitVector.EMPTY(), 0, 0));
+        assertEquals(BitVector.emptyVector(), BitVector.emptyVector().write(BitVector.emptyVector(), 0, 0));
 
         for (int i = 0; i < Long.SIZE * 8; i++) {
             boolean[] source = new boolean[Long.SIZE * 8];
@@ -703,7 +703,7 @@ public class BitVectorTest {
 
     @Test
     public void set() throws Exception {
-        BitVector.EMPTY().set(0, BitVector.EMPTY(), 0, 0);
+        BitVector.emptyVector().set(0, BitVector.emptyVector(), 0, 0);
 
         for (int index = 0; index < Long.SIZE * 2; index++) {
             for (int offset = 0; offset < 16; offset++) {
@@ -727,7 +727,7 @@ public class BitVectorTest {
 
     @Test
     public void set1() throws Exception {
-        BitVector.EMPTY().set(0, BitVector.EMPTY());
+        BitVector.emptyVector().set(0, BitVector.emptyVector());
 
         for (int index = 0; index < Long.SIZE * 2; index++) {
 //            for (int offset = 0; offset < 16; offset++) {
@@ -751,7 +751,7 @@ public class BitVectorTest {
 
     @Test
     public void size1() throws Exception {
-        assertEquals(0, BitVector.EMPTY().size());
+        assertEquals(0, BitVector.emptyVector().size());
         assertEquals(0, new BitVector(0).size());
         assertEquals(0, BitVector.of(new byte[0]).size());
         assertEquals(0, BitVector.of(new long[0]).size());
@@ -776,7 +776,7 @@ public class BitVectorTest {
 
     @Test
     public void isEmpty() throws Exception {
-        assertTrue(BitVector.EMPTY().isEmpty());
+        assertTrue(BitVector.emptyVector().isEmpty());
         assertTrue(new BitVector(0).isEmpty());
         assertTrue(BitVector.of(new byte[0]).isEmpty());
         assertTrue(BitVector.of(new long[0]).isEmpty());
@@ -1129,10 +1129,10 @@ public class BitVectorTest {
 
     @Test
     public void matches() throws Exception {
-        assertTrue(BitVector.EMPTY().matches(0, BitVector.EMPTY()));
-        assertTrue(BitVector.EMPTY().matches(0, new BitVector(0)));
-        assertFalse(BitVector.EMPTY().matches(0, BitVector.of(true)));
-        assertFalse(BitVector.EMPTY().matches(0, new BitVector(1)));
+        assertTrue(BitVector.emptyVector().matches(0, BitVector.emptyVector()));
+        assertTrue(BitVector.emptyVector().matches(0, new BitVector(0)));
+        assertFalse(BitVector.emptyVector().matches(0, BitVector.of(true)));
+        assertFalse(BitVector.emptyVector().matches(0, new BitVector(1)));
         boolean[] reference = concat(concat(striped(Long.SIZE * 4), trueArray(Long.SIZE * 2)), falseArray(Long.SIZE * 2));
         boolean[] cpyref = Arrays.copyOf(reference, reference.length - 1);
 
@@ -1150,10 +1150,10 @@ public class BitVectorTest {
 
     @Test
     public void matches1() throws Exception {
-        assertTrue(BitVector.EMPTY().matches(BitVector.EMPTY()));
-        assertTrue(BitVector.EMPTY().matches(new BitVector(0)));
-        assertFalse(BitVector.EMPTY().matches(BitVector.of(true)));
-        assertFalse(BitVector.EMPTY().matches(new BitVector(1)));
+        assertTrue(BitVector.emptyVector().matches(BitVector.emptyVector()));
+        assertTrue(BitVector.emptyVector().matches(new BitVector(0)));
+        assertFalse(BitVector.emptyVector().matches(BitVector.of(true)));
+        assertFalse(BitVector.emptyVector().matches(new BitVector(1)));
         boolean[] reference = concat(concat(striped(Long.SIZE * 4), trueArray(Long.SIZE * 2)), falseArray(Long.SIZE * 2));
         assertTrue(BitVector.of(reference).matches(0, BitVector.of(reference)));
         boolean[] cpy = Arrays.copyOf(reference, reference.length);
@@ -1163,7 +1163,7 @@ public class BitVectorTest {
 
     @Test
     public void indexOf() throws Exception {
-        assertEquals(0, BitVector.of(true).indexOf(BitVector.EMPTY()));
+        assertEquals(0, BitVector.of(true).indexOf(BitVector.emptyVector()));
         assertEquals(0, BitVector.of(true).indexOf(BitVector.of(true)));
         assertEquals(0, BitVector.of(false).indexOf(BitVector.of(false)));
 
@@ -1198,7 +1198,7 @@ public class BitVectorTest {
 
     @Test
     public void indexOf1() throws Exception {
-        assertEquals(0, BitVector.of(true).indexOf(BitVector.EMPTY()));
+        assertEquals(0, BitVector.of(true).indexOf(BitVector.emptyVector()));
         assertEquals(0, BitVector.of(true).indexOf(BitVector.of(true)));
         assertEquals(0, BitVector.of(false).indexOf(BitVector.of(false)));
 
@@ -1224,22 +1224,22 @@ public class BitVectorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void writeBitsThrows() {
-        BitVector.EMPTY().writeBits(0, -1);
+        BitVector.emptyVector().writeBits(0, -1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void writeBitsThrows1() {
-        BitVector.EMPTY().writeBits(0, 33);
+        BitVector.emptyVector().writeBits(0, 33);
     }
 
     @Test
     public void writeBits() {
-        assertEquals(BitVector.EMPTY(), new BitVector().writeBits(0, 0));
+        assertEquals(BitVector.emptyVector(), new BitVector().writeBits(0, 0));
         for (int i = 0; i < 256; i++) {
             int highest = highestBit(i);
 
             if (highest == -1) {
-                assertEquals(BitVector.EMPTY(), new BitVector().writeBits(i, 0));
+                assertEquals(BitVector.emptyVector(), new BitVector().writeBits(i, 0));
             } else {
                 boolean[] boolArray = Arrays.copyOf(intAsBooleanArray(i), highest);
                 assertEquals(BitVector.of(boolArray), new BitVector().writeBits(i, highest));
@@ -1254,22 +1254,22 @@ public class BitVectorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void writeBitsLThrows() {
-        BitVector.EMPTY().writeBits(0L, -1);
+        BitVector.emptyVector().writeBits(0L, -1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void writeBitsLThrows1() {
-        BitVector.EMPTY().writeBits(0L, 65);
+        BitVector.emptyVector().writeBits(0L, 65);
     }
 
     @Test
     public void writeBitsL() {
-        assertEquals(BitVector.EMPTY(), new BitVector().writeBits(0L, 0));
+        assertEquals(BitVector.emptyVector(), new BitVector().writeBits(0L, 0));
         for (long i = 0; i < 256; i++) {
             int highest = highestBit(i);
 
             if (highest == -1) {
-                assertEquals(BitVector.EMPTY(), new BitVector().writeBits(i, 0));
+                assertEquals(BitVector.emptyVector(), new BitVector().writeBits(i, 0));
             } else {
                 boolean[] boolArray = Arrays.copyOf(longAsBooleanArray(i), highest);
                 assertEquals(BitVector.of(boolArray), new BitVector().writeBits(i, highest));
@@ -1284,7 +1284,7 @@ public class BitVectorTest {
 
     @Test
     public void toByteArrayTest() {
-        assertArrayEquals(new byte[0], BitVector.EMPTY().toByteArray());
+        assertArrayEquals(new byte[0], BitVector.emptyVector().toByteArray());
 
         assertArrayEquals(new byte[]{1}, BitVector.of(true).toByteArray());
         boolean[] longValue = longAsBooleanArray(0xABCDEF0123456789L);
@@ -1300,9 +1300,9 @@ public class BitVectorTest {
     @Test
     public void replaceFirst() {
         //replaceFirst(int index, AbstractReadableBitVector find, AbstractReadableBitVector replace)
-        assertEquals(BitVector.of(new boolean[]{true, false, true}), BitVector.of(new boolean[]{true, false, true}).replaceFirst(BitVector.EMPTY(), BitVector.EMPTY()));
-        assertEquals(BitVector.EMPTY(), BitVector.EMPTY().replaceFirst(BitVector.EMPTY(), BitVector.of(new boolean[]{true})));
-        assertEquals(BitVector.EMPTY(), BitVector.EMPTY().replaceFirst(BitVector.EMPTY(), BitVector.of(new boolean[]{false})));
+        assertEquals(BitVector.of(new boolean[]{true, false, true}), BitVector.of(new boolean[]{true, false, true}).replaceFirst(BitVector.emptyVector(), BitVector.emptyVector()));
+        assertEquals(BitVector.emptyVector(), BitVector.emptyVector().replaceFirst(BitVector.emptyVector(), BitVector.of(new boolean[]{true})));
+        assertEquals(BitVector.emptyVector(), BitVector.emptyVector().replaceFirst(BitVector.emptyVector(), BitVector.of(new boolean[]{false})));
 
 
         assertEquals(

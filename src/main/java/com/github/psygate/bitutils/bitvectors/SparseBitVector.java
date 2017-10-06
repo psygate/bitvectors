@@ -25,12 +25,14 @@
 
 package com.github.psygate.bitutils.bitvectors;
 
+import com.github.psygate.bitutils.bitvectors.BitVector;
+
 import java.util.TreeMap;
 
 /**
  * Created by psygate on 19.09.2017.
  */
-public class SparseBitVector extends AbstractWriteableBitVector<SparseBitVector> {
+public class SparseBitVector extends BitVector {
     private TreeMap<Integer, BitVector> vectors = new TreeMap<>();
 
     @Override
@@ -44,22 +46,22 @@ public class SparseBitVector extends AbstractWriteableBitVector<SparseBitVector>
     }
 
     @Override
-    public SparseBitVector replaceFirst(int index, AbstractReadableBitVector find, AbstractReadableBitVector replace) {
+    public SparseBitVector replaceFirst(int index, BitVector find, BitVector replace) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected SparseBitVector uncheckedOr(AbstractReadableBitVector other) {
+    protected SparseBitVector uncheckedOr(BitVector other) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected SparseBitVector uncheckedAnd(AbstractReadableBitVector other) {
+    protected SparseBitVector uncheckedAnd(BitVector other) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected SparseBitVector uncheckedXor(AbstractReadableBitVector other) {
+    protected SparseBitVector uncheckedXor(BitVector other) {
         throw new UnsupportedOperationException();
     }
 
