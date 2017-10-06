@@ -56,7 +56,7 @@ public class BitOutputStream extends OutputStream implements AutoCloseable, Data
 
     public void writeBits(int bits, int amount) throws IOException {
         if (amount < 0 || amount > Integer.SIZE) {
-            throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Long.SIZE + ")");
+            throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Integer.SIZE + ")");
         } else if (amount == 0) {
             //Skip
         } else {
@@ -78,8 +78,8 @@ public class BitOutputStream extends OutputStream implements AutoCloseable, Data
     }
 
     public void writeBitsLong(long bits, int amount) throws IOException {
-        if (amount < 0 || amount >= Long.SIZE) {
-            throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Integer.SIZE + ")");
+        if (amount < 0 || amount > Long.SIZE) {
+            throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Long.SIZE + ")");
         } else if (amount == 0) {
             //Skip
         } else {
