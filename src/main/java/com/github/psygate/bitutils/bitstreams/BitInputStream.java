@@ -25,7 +25,9 @@
 
 package com.github.psygate.bitutils.bitstreams;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 /**
@@ -33,13 +35,12 @@ import java.util.Objects;
  * <p>
  * A simple BitInputStream wrapper for input streams.
  */
-public class BitInputStream extends InputStream implements AutoCloseable, DataInput {
+public class BitInputStream extends AbstractBitStream {
     private final static int BUFFER_SIZE = Byte.SIZE;
 
     private final InputStream underlying;
     private int buffer;
     private int bufferedBits;
-    private long position;
 
     /**
      * Constructs a new BitInputStream from the input stream.
@@ -50,34 +51,7 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
         underlying = Objects.requireNonNull(in, "InputStream to BitInputStream cannot be null.");
     }
 
-    @Override
-    public boolean markSupported() {
-        return false;
-    }
-
-    @Override
-    public int available() throws IOException {
-        return underlying.available();
-    }
-
-    @Override
-    public int read() throws IOException {
-        try {
-            return readBits(Byte.SIZE);
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    /**
-     * Reads the specified amount of bits from the stream.
-     *
-     * @param amount Amount of bits to read.
-     * @return Integer containing the requested amount of bits.
-     * @throws IOException              If the underlying stream does not contain enough bytes to satisfy the requested amount.
-     * @throws IllegalArgumentException If the requested amount of bits too large for an integer or smaller than 0.
-     */
-    public int readBits(final int amount) throws IOException {
+    protected int readBitsUnchecked(final int amount) throws IOException {
         if (amount > Integer.SIZE || amount < 0) {
             throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Integer.SIZE + ")");
         } else if (amount == 0) {
@@ -120,33 +94,6 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
         }
     }
 
-    /**
-     * Reads the specified amount of bits from the stream.
-     *
-     * @param amount Amount of bits to read.
-     * @return Long containing the requested amount of bits.
-     * @throws IOException              If the underlying stream does not contain enough bytes to satisfy the requested amount.
-     * @throws IllegalArgumentException If the requested amount of bits too large for a long or smaller than 0.
-     */
-    public long readBitsLong(final int amount) throws IOException {
-        if (amount < 0 || amount > Long.SIZE) {
-            throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Long.SIZE + ")");
-        } else if (amount <= Integer.SIZE) {
-            return readBits(amount);
-        } else {
-            long lower = readBits(Integer.SIZE) & 0xFFFFFFFFL;
-            long upper = readBits(amount - Integer.SIZE) & 0xFFFFFFFFL;
-
-            return (lower | (upper << Integer.SIZE)) & fitMask(amount);
-        }
-    }
-
-    /**
-     * @return Current bit position in the stream.
-     */
-    public long getPosition() {
-        return position;
-    }
 
     private void fillBuffer() throws IOException {
         if (bufferedBits <= 0) {
@@ -161,113 +108,16 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
         }
     }
 
-    /**
-     * This method is unchecked so amounts bigger the Long.SIZE or amounts smaller than 0 may work.
-     *
-     * @param amount Amount of bits to mask (from the lsb to the msb).
-     * @return Masked value.
-     */
-    private static long fitMask(int amount) {
-        return 0xFFFFFFFFFFFFFFFFL >>> (Long.SIZE - amount);
-    }
 
-    /**
-     * This method is unchecked so amounts bigger the Long.SIZE or amounts smaller than 0 may work.
-     *
-     * @param amount Amount of bits to mask (from the lsb to the msb).
-     * @return Masked value.
-     */
-    private static int fitIntegerMask(int amount) {
-        return 0xFFFFFFFF >>> (Integer.SIZE - amount);
+    @Override
+    protected void checkAvailable(long amount) {
+
     }
 
     @Override
     public void close() throws IOException {
         underlying.close();
-    }
-
-    @Override
-    public void readFully(byte[] b) throws IOException {
-        readFully(b, 0, b.length);
-    }
-
-    @Override
-    public void readFully(byte[] b, int off, int len) throws IOException {
-        for (int i = 0; i < len; i++) {
-            b[i + off] = readByte();
-        }
-    }
-
-    @Override
-    public int skipBytes(int n) throws IOException {
-        for (int i = 0; i < n; i++) {
-            try {
-                readByte();
-            } catch (EOFException e) {
-                return i;
-            }
-        }
-
-        return n;
-    }
-
-    @Override
-    public boolean readBoolean() throws IOException {
-        return readUnsignedByte() != 0;
-    }
-
-    @Override
-    public byte readByte() throws IOException {
-        return (byte) readUnsignedByte();
-    }
-
-    @Override
-    public int readUnsignedByte() throws IOException {
-        return readBits(Byte.SIZE);
-    }
-
-    @Override
-    public short readShort() throws IOException {
-        return (short) readUnsignedShort();
-    }
-
-    @Override
-    public int readUnsignedShort() throws IOException {
-        return readBits(Short.SIZE);
-    }
-
-    @Override
-    public char readChar() throws IOException {
-        return (char) readBits(Character.SIZE);
-    }
-
-    @Override
-    public int readInt() throws IOException {
-        return readBits(Integer.SIZE);
-    }
-
-    @Override
-    public long readLong() throws IOException {
-        return readBitsLong(Long.SIZE);
-    }
-
-    @Override
-    public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt());
-    }
-
-    @Override
-    public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong());
-    }
-
-    @Override
-    public String readLine() throws IOException {
-        return new BufferedReader(new InputStreamReader(this)).readLine();
-    }
-
-    @Override
-    public String readUTF() throws IOException {
-        return DataInputStream.readUTF(this);
+        bufferedBits = 0;
+        buffer = 0;
     }
 }
