@@ -99,6 +99,32 @@ public class ByteArrayBitInputStream extends AbstractBitInputStream {
         }
     }
 
+    public long getRemainingBits() {
+        return data.length * 8L - position;
+    }
+
+    public long getRemainingBytes() {
+        return getRemainingBits() / 8L;
+    }
+
+    public byte[] drain() throws IOException {
+        long remainingBits = getRemainingBits();
+        int remainingBytes = (int) (remainingBits / 8L);
+        int trailingBits = (int) (remainingBits - remainingBytes * 8L);
+
+        byte[] output = new byte[(remainingBytes + ((trailingBits > 0) ? 1 : 0))];
+
+        for (int i = 0; i < getRemainingBytes(); i++) {
+            output[i] = readByte();
+        }
+
+        if (trailingBits > 0) {
+            output[output.length - 1] = (byte) readBitsUnchecked(trailingBits);
+        }
+
+        return output;
+    }
+
     @Override
     public boolean markSupported() {
         return true;
