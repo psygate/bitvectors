@@ -35,7 +35,7 @@ import java.util.Objects;
  * <p>
  * A simple BitInputStream wrapper for input streams.
  */
-public class BitInputStream extends AbstractBitStream {
+public class BitInputStream extends AbstractBitInputStream {
     private final static int BUFFER_SIZE = Byte.SIZE;
 
     private final InputStream underlying;

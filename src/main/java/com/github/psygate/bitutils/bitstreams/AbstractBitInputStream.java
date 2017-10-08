@@ -30,7 +30,7 @@ import java.io.*;
 /**
  * Created by psygate on 08.10.2017.
  */
-public abstract class AbstractBitStream extends InputStream implements DataInput, AutoCloseable {
+public abstract class AbstractBitInputStream extends InputStream implements DataInput, AutoCloseable {
     protected long position = 0;
 
     public int readBit() throws IOException {

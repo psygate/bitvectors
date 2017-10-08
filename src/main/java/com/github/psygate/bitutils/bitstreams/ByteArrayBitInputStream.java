@@ -32,7 +32,7 @@ import java.io.InputStream;
 /**
  * Created by psygate on 07.10.2017.
  */
-public class ByteArrayBitInputStream extends AbstractBitStream {
+public class ByteArrayBitInputStream extends AbstractBitInputStream {
     private final byte[] data;
     private long mark = -1;
 
