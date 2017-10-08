@@ -129,15 +129,15 @@ public class BitInputStream extends InputStream implements AutoCloseable, DataIn
      * @throws IllegalArgumentException If the requested amount of bits too large for a long or smaller than 0.
      */
     public long readBitsLong(final int amount) throws IOException {
-        if (amount <= Integer.SIZE) {
-            return readBits(amount);
-        } else if (amount < 0 || amount > Long.SIZE) {
+        if (amount < 0 || amount > Long.SIZE) {
             throw new IllegalArgumentException("Requested amount exceeds data type size. (" + amount + "/" + Long.SIZE + ")");
+        } else if (amount <= Integer.SIZE) {
+            return readBits(amount);
         } else {
-            long lowerValue = ((long) readBits(Integer.SIZE)) & 0xFFFFFFFFL;
-            long upperValue = (((long) readBits(Integer.SIZE)) & 0xFFFFFFFFL) << Integer.SIZE;
+            long lower = readBits(Integer.SIZE) & 0xFFFFFFFFL;
+            long upper = readBits(amount - Integer.SIZE) & 0xFFFFFFFFL;
 
-            return (lowerValue | upperValue) & fitMask(amount);
+            return (lower | (upper << Integer.SIZE)) & fitMask(amount);
         }
     }
 
